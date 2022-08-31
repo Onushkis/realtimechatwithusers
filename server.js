@@ -1,8 +1,8 @@
-const path = require('path');
-const http = require('http');
-const express = require('express');
-const socketio = require('socket.io');
-const formatMessage = require('./utils/messages');
+const path = require("path");
+const http = require("http");
+const express = require("express");
+const formatMessage = require("./utils/messages");
+const socketio = require("socket.io");
 const { userJoin, getCurrrentUser } = require('./utils/users')
 
 const app = express();
@@ -25,15 +25,16 @@ socket.join(user.room);
     formatMessage(botName, 'Welcme to ChatCord'));
   
   // Broadcast when a user connects
-  socket.broadcast.to(user.room).emit(
-    'message', 
-    formatMessage(botName,`${user.username} has joined the chat`));
+  socket.broadcast
+  .to(user.room)
+  .emit('message', 
+   formatMessage(botName,`${user.username} has joined the chat`));
 });
 
 // Listen for chatMessage
 
 socket.on('chatMessage', (msg) => {
-  io.emit('message', msg);
+  io.to(user.room).emit("message", formatMessage(user.username, msg));
 });
 
 //Runs the client disconnects
